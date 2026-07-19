@@ -260,8 +260,9 @@ ALTER TABLE expenses ENABLE ROW LEVEL SECURITY;
 ALTER TABLE employees ENABLE ROW LEVEL SECURITY;
 ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
 
--- Profiles: users can read all profiles, update only their own
+-- Profiles: users can read all profiles, insert own, update only their own
 CREATE POLICY "Users can view all profiles" ON profiles FOR SELECT USING (true);
+CREATE POLICY "Users can insert own profile" ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
 CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
 
 -- Settings: authenticated users can read and update

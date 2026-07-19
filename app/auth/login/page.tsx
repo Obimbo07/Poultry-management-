@@ -24,7 +24,11 @@ export default function LoginPage() {
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) {
-      toast.error(error.message)
+      if (error.message.includes("confirmed")) {
+        toast.error("Please confirm your email before signing in.")
+      } else {
+        toast.error(error.message)
+      }
       setLoading(false)
       return
     }
@@ -85,6 +89,13 @@ export default function LoginPage() {
               Sign In
             </Button>
           </form>
+
+          <p className="mt-6 text-center text-sm text-muted-foreground">
+            Don&apos;t have an account?{" "}
+            <Link href="/auth/registration" className="font-medium text-primary hover:underline">
+              Sign up
+            </Link>
+          </p>
 
           <div className="mt-6 rounded-lg border border-border bg-muted/50 p-4 text-xs text-muted-foreground">
             <p className="font-semibold text-foreground">Demo accounts</p>
