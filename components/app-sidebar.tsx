@@ -58,11 +58,13 @@ export function AppSidebar({ profile, farmName }: { profile: Profile; farmName: 
                     pathname === item.href || pathname.startsWith(item.href + "/")
                   return (
                     <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton asChild isActive={active} tooltip={item.label}>
-                        <Link href={item.href}>
-                          <item.icon />
-                          <span>{item.label}</span>
-                        </Link>
+                      <SidebarMenuButton
+                        render={<Link href={item.href} />}
+                        isActive={active}
+                        tooltip={item.label}
+                      >
+                        <item.icon />
+                        <span>{item.label}</span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   )
