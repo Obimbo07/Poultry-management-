@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Bell, LogOut, User } from "lucide-react"
+import { Bell, LogOut, User, Settings } from "lucide-react"
 import { signOut } from "@/app/actions/auth"
 import { ROLE_LABELS, type Profile } from "@/lib/types"
 import { CommandMenu } from "@/components/command-menu"
@@ -9,7 +9,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,6 +55,7 @@ export function AppTopbar({ profile, unread }: { profile: Profile; unread: numbe
             aria-label="Account"
           >
             <Avatar className="h-8 w-8">
+              <AvatarImage src={profile.avatar ?? undefined} />
               <AvatarFallback className="bg-primary/10 text-primary text-xs">
                 {initials(profile.full_name)}
               </AvatarFallback>
@@ -76,6 +77,12 @@ export function AppTopbar({ profile, unread }: { profile: Profile; unread: numbe
             <DropdownMenuItem>
               <Link href="/profile" className="flex items-center gap-1.5">
                 <User className="h-4 w-4" /> Profile
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="p-0">
+              <Link href="/settings" className="flex w-full items-center gap-1.5 px-2 py-1.5">
+                <Settings className="h-4 w-4" /> Settings
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />

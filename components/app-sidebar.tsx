@@ -17,7 +17,7 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 function initials(name: string | null) {
   if (!name) return "U"
@@ -76,8 +76,12 @@ export function AppSidebar({ profile, farmName }: { profile: Profile; farmName: 
       </SidebarContent>
 
       <SidebarFooter>
-        <div className="flex items-center gap-2 px-2 py-2">
+        <Link
+          href="/profile"
+          className="flex items-center gap-2 px-2 py-2 hover:bg-sidebar-accent rounded-lg transition-colors"
+        >
           <Avatar className="h-8 w-8">
+            <AvatarImage src={profile.avatar ?? undefined} />
             <AvatarFallback className="bg-sidebar-accent text-sidebar-accent-foreground text-xs">
               {initials(profile.full_name)}
             </AvatarFallback>
@@ -88,7 +92,7 @@ export function AppSidebar({ profile, farmName }: { profile: Profile; farmName: 
               {ROLE_LABELS[profile.role]}
             </span>
           </div>
-        </div>
+        </Link>
       </SidebarFooter>
     </Sidebar>
   )
