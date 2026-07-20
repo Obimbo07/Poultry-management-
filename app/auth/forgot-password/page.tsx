@@ -21,7 +21,7 @@ export default async function ForgotPasswordPage({
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
             <Egg className="h-5 w-5" />
           </div>
-          <span className="text-xl font-bold tracking-tight">PoultryPro</span>
+          <span className="text-xl font-bold tracking-tight">Al Aqsa Poultry</span>
         </div>
 
         <h1 className="text-2xl font-bold tracking-tight">Reset your password</h1>

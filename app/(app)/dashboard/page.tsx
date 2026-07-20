@@ -24,7 +24,7 @@ import {
   FeedChart,
 } from "@/components/dashboard-charts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+
 import { Badge } from "@/components/ui/badge"
 
 export default async function DashboardPage() {
@@ -82,13 +82,11 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
             {quickActions.map((a) => (
-              <Button key={a.href} asChild variant="outline" className="justify-start">
-                <Link href={a.href}>
+              <Link key={a.href} href={a.href} className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-background px-2.5 text-sm font-medium hover:bg-muted hover:text-foreground justify-start">
                   <a.icon className="h-4 w-4" />
                   {a.label}
                   <Plus className="ml-auto h-4 w-4 text-muted-foreground" />
-                </Link>
-              </Button>
+              </Link>
             ))}
           </CardContent>
         </Card>

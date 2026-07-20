@@ -41,7 +41,7 @@ export function AppSidebar({ profile, farmName }: { profile: Profile; farmName: 
             <Egg className="h-5 w-5" />
           </div>
           <div className="flex flex-col overflow-hidden">
-            <span className="truncate text-sm font-bold leading-tight">PoultryPro</span>
+            <span className="truncate text-sm font-bold leading-tight">Al Aqsa Poultry</span>
             <span className="truncate text-xs text-sidebar-foreground/60">{farmName}</span>
           </div>
         </div>

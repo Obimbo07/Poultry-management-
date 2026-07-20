@@ -8,7 +8,6 @@ import { CommandMenu } from "@/components/command-menu"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
@@ -38,25 +37,28 @@ export function AppTopbar({ profile, unread }: { profile: Profile; unread: numbe
       <CommandMenu role={profile.role} />
       <div className="ml-auto flex items-center gap-1">
         <ThemeToggle />
-        <Button asChild variant="ghost" size="icon" className="relative" aria-label="Notifications">
-          <Link href="/notifications">
-            <Bell className="h-5 w-5" />
-            {unread > 0 && (
-              <span className="absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-white">
-                {unread > 9 ? "9+" : unread}
-              </span>
-            )}
-          </Link>
-        </Button>
+        <Link
+          href="/notifications"
+          className="relative inline-flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+          aria-label="Notifications"
+        >
+          <Bell className="h-5 w-5" />
+          {unread > 0 && (
+            <span className="absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-white">
+              {unread > 9 ? "9+" : unread}
+            </span>
+          )}
+        </Link>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full" aria-label="Account">
-              <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-primary/10 text-primary text-xs">
-                  {initials(profile.full_name)}
-                </AvatarFallback>
-              </Avatar>
-            </Button>
+          <DropdownMenuTrigger
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label="Account"
+          >
+            <Avatar className="h-8 w-8">
+              <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                {initials(profile.full_name)}
+              </AvatarFallback>
+            </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>
@@ -71,8 +73,8 @@ export function AppTopbar({ profile, unread }: { profile: Profile; unread: numbe
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/profile">
+            <DropdownMenuItem>
+              <Link href="/profile" className="flex items-center gap-1.5">
                 <User className="h-4 w-4" /> Profile
               </Link>
             </DropdownMenuItem>

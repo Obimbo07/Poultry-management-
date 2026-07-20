@@ -11,7 +11,7 @@ const manrope = Manrope({
 })
 
 export const metadata: Metadata = {
-  title: "PoultryPro — Farm Management System",
+  title: "Al Aqsa Poultry — Farm Management System",
   description:
     "Enterprise poultry farm management: flocks, feed, egg production, sales, finance, and analytics.",
   generator: "v0.app",
@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className="bg-background">
-      <body className={`${manrope.variable} font-sans antialiased`}>
+      <body suppressHydrationWarning className={`${manrope.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

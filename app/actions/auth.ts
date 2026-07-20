@@ -3,10 +3,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 
-function getOrigin(): string {
-  return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-}
-
 export async function signOut() {
   const supabase = await createClient()
   await supabase.auth.signOut()
@@ -21,17 +17,23 @@ export async function loginUser(formData: FormData) {
     redirect("/auth/login?error=Email+and+password+are+required.")
   }
 
-  const supabase = await createClient()
-  const { error } = await supabase.auth.signInWithPassword({ email, password })
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
 
-  if (error) {
-    if (error.message.includes("confirmed")) {
-      redirect("/auth/login?error=Please+confirm+your+email+before+signing+in.")
+    if (error) {
+      if (error.message.includes("confirmed")) {
+        redirect("/auth/login?error=Please+confirm+your+email+before+signing+in.")
+      }
+      redirect(`/auth/login?error=${encodeURIComponent(error.message)}`)
     }
-    redirect(`/auth/login?error=${encodeURIComponent(error.message)}`)
-  }
 
-  redirect("/dashboard")
+    redirect("/dashboard")
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Login failed"
+    if (message.includes("NEXT_REDIRECT")) throw err
+    redirect(`/auth/login?error=${encodeURIComponent(message)}`)
+  }
 }
 
 export async function registerUser(formData: FormData) {
@@ -52,30 +54,36 @@ export async function registerUser(formData: FormData) {
     redirect("/auth/registration?error=Password+must+be+at+least+8+characters.")
   }
 
-  const supabase = await createClient()
+  try {
+    const supabase = await createClient()
 
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        full_name: fullName,
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: fullName,
+        },
       },
-    },
-  })
+    })
 
-  if (error) {
-    redirect(`/auth/registration?error=${encodeURIComponent(error.message)}`)
-  }
+    if (error) {
+      redirect(`/auth/registration?error=${encodeURIComponent(error.message)}`)
+    }
 
-  if (data?.user?.identities?.length === 0) {
-    redirect("/auth/registration?error=This+email+is+already+registered.")
-  }
+    if (data?.user?.identities?.length === 0) {
+      redirect("/auth/registration?error=This+email+is+already+registered.")
+    }
 
-  if (data?.session) {
-    redirect("/dashboard")
-  } else {
-    redirect("/auth/login?message=Account+created!+Please+check+your+email+to+verify.")
+    if (data?.session) {
+      redirect("/dashboard")
+    } else {
+      redirect("/auth/login?message=Account+created!+Please+check+your+email+to+verify.")
+    }
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Registration failed"
+    if (message.includes("NEXT_REDIRECT")) throw err
+    redirect(`/auth/registration?error=${encodeURIComponent(message)}`)
   }
 }
 
@@ -86,18 +94,24 @@ export async function forgotPassword(formData: FormData) {
     redirect("/auth/forgot-password?error=Email+is+required.")
   }
 
-  const supabase = await createClient()
-  const origin = getOrigin()
+  try {
+    const supabase = await createClient()
+    const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${origin}/auth/callback?next=/auth/reset-password`,
-  })
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${origin}/auth/callback?next=/auth/reset-password`,
+    })
 
-  if (error) {
-    redirect(`/auth/forgot-password?error=${encodeURIComponent(error.message)}`)
+    if (error) {
+      redirect(`/auth/forgot-password?error=${encodeURIComponent(error.message)}`)
+    }
+
+    redirect("/auth/forgot-password?sent=true")
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Failed to send reset link"
+    if (message.includes("NEXT_REDIRECT")) throw err
+    redirect(`/auth/forgot-password?error=${encodeURIComponent(message)}`)
   }
-
-  redirect("/auth/forgot-password?sent=true")
 }
 
 export async function resetPassword(formData: FormData) {
@@ -116,12 +130,18 @@ export async function resetPassword(formData: FormData) {
     redirect("/auth/reset-password?error=Password+must+be+at+least+8+characters.")
   }
 
-  const supabase = await createClient()
-  const { error } = await supabase.auth.updateUser({ password })
+  try {
+    const supabase = await createClient()
+    const { error } = await supabase.auth.updateUser({ password })
 
-  if (error) {
-    redirect(`/auth/reset-password?error=${encodeURIComponent(error.message)}`)
+    if (error) {
+      redirect(`/auth/reset-password?error=${encodeURIComponent(error.message)}`)
+    }
+
+    redirect("/auth/login?message=Password+updated!+Please+sign+in.")
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Password reset failed"
+    if (message.includes("NEXT_REDIRECT")) throw err
+    redirect(`/auth/reset-password?error=${encodeURIComponent(message)}`)
   }
-
-  redirect("/auth/login?message=Password+updated!+Please+sign+in.")
 }

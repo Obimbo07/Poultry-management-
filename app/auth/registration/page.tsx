@@ -22,7 +22,7 @@ export default async function RegisterPage({
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
               <Egg className="h-5 w-5" />
             </div>
-            <span className="text-xl font-bold tracking-tight">PoultryPro</span>
+            <span className="text-xl font-bold tracking-tight">Al Aqsa Poultry</span>
           </div>
 
           <h1 className="text-2xl font-bold tracking-tight text-balance">Create your account</h1>
@@ -114,7 +114,7 @@ export default async function RegisterPage({
         <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent" />
         <div className="absolute bottom-10 left-10 right-10 text-primary-foreground">
           <p className="text-2xl font-bold text-balance drop-shadow">
-            Join thousands of farmers managing their operations with PoultryPro.
+            Join thousands of farmers managing their operations with Al Aqsa Poultry.
           </p>
         </div>
       </section>

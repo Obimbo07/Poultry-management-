@@ -23,7 +23,7 @@ export default async function LoginPage({
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
               <Egg className="h-5 w-5" />
             </div>
-            <span className="text-xl font-bold tracking-tight">PoultryPro</span>
+            <span className="text-xl font-bold tracking-tight">Al Aqsa Poultry</span>
           </div>
 
           <h1 className="text-2xl font-bold tracking-tight text-balance">Sign in to your farm</h1>
