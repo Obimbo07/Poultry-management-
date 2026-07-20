@@ -220,16 +220,16 @@ export function ResourcePage({ resource, rows, currency = "USD" }: ResourcePageP
       <PageHeader title={resource.label} description={resource.description}>
         <Button variant="outline" size="sm" onClick={handleExport}>
           <Download className="h-4 w-4" />
-          Export
+          <span className="hidden sm:inline">Export</span>
         </Button>
         <Button size="sm" onClick={() => { setEditing(null); setFormOpen(true) }}>
           <Plus className="h-4 w-4" />
-          Add {resource.singular}
+          <span className="hidden sm:inline">Add {resource.singular}</span>
         </Button>
       </PageHeader>
 
-      <div className="flex items-center gap-2 mb-4">
-        <div className="relative flex-1 max-w-sm">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2 mb-4">
+        <div className="relative flex-1 max-w-sm w-full">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder={`Search ${resource.label.toLowerCase()}...`}
@@ -246,7 +246,7 @@ export function ResourcePage({ resource, rows, currency = "USD" }: ResourcePageP
         )}
       </div>
 
-      <div className="rounded-lg border">
+      <div className="rounded-lg border overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -257,7 +257,9 @@ export function ResourcePage({ resource, rows, currency = "USD" }: ResourcePageP
                 />
               </TableHead>
               {resource.columns.map((col) => (
-                <TableHead key={col.key}>{col.label}</TableHead>
+                <TableHead key={col.key} className={col.hideOnMobile ? "hidden md:table-cell" : ""}>
+                  {col.label}
+                </TableHead>
               ))}
               <TableHead className="w-10" />
             </TableRow>
@@ -279,7 +281,7 @@ export function ResourcePage({ resource, rows, currency = "USD" }: ResourcePageP
                     />
                   </TableCell>
                   {resource.columns.map((col) => (
-                    <TableCell key={col.key}>
+                    <TableCell key={col.key} className={col.hideOnMobile ? "hidden md:table-cell" : ""}>
                       {formatCell(row[col.key], col.type, currency)}
                     </TableCell>
                   ))}
@@ -304,7 +306,6 @@ export function ResourcePage({ resource, rows, currency = "USD" }: ResourcePageP
         {search ? ` (filtered from ${rows.length})` : ""}
       </p>
 
-      {/* Create / Edit Dialog */}
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -337,7 +338,6 @@ export function ResourcePage({ resource, rows, currency = "USD" }: ResourcePageP
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>

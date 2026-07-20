@@ -35,7 +35,7 @@ export default async function AuditLogsPage() {
               <TableHead>Date</TableHead>
               <TableHead>User</TableHead>
               <TableHead>Action</TableHead>
-              <TableHead>Table</TableHead>
+              <TableHead className="hidden md:table-cell">Table</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -55,7 +55,7 @@ export default async function AuditLogsPage() {
                   <TableCell>
                     <Badge variant="outline">{log.action}</Badge>
                   </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">{log.table_name}</TableCell>
+                  <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{log.table_name}</TableCell>
                 </TableRow>
               ))
             )}

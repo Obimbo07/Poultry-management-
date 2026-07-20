@@ -15,6 +15,7 @@ export interface ResourceColumn {
   key: string
   label: string
   type?: ColumnType
+  hideOnMobile?: boolean
 }
 
 export interface ResourceConfig {
@@ -40,8 +41,8 @@ export const RESOURCES: Record<string, ResourceConfig> = {
     columns: [
       { key: "supplier_name", label: "Name" },
       { key: "phone", label: "Phone" },
-      { key: "email", label: "Email" },
-      { key: "address", label: "Address" },
+      { key: "email", label: "Email", hideOnMobile: true },
+      { key: "address", label: "Address", hideOnMobile: true },
     ],
     fields: [
       { name: "supplier_name", label: "Supplier Name", type: "text", required: true },
@@ -61,10 +62,10 @@ export const RESOURCES: Record<string, ResourceConfig> = {
       { key: "batch_name", label: "Batch" },
       { key: "breed", label: "Breed" },
       { key: "category", label: "Category", type: "badge" },
-      { key: "quantity", label: "Quantity", type: "number" },
-      { key: "age", label: "Age (wks)", type: "number" },
-      { key: "arrival_date", label: "Arrival", type: "date" },
-      { key: "purchase_price", label: "Cost", type: "currency" },
+      { key: "quantity", label: "Quantity", type: "number", hideOnMobile: true },
+      { key: "age", label: "Age (wks)", type: "number", hideOnMobile: true },
+      { key: "arrival_date", label: "Arrival", type: "date", hideOnMobile: true },
+      { key: "purchase_price", label: "Cost", type: "currency", hideOnMobile: true },
       { key: "status", label: "Status", type: "badge" },
     ],
     fields: [
@@ -90,10 +91,10 @@ export const RESOURCES: Record<string, ResourceConfig> = {
       { key: "feed_name", label: "Feed" },
       { key: "feed_type", label: "Type", type: "badge" },
       { key: "quantity", label: "Qty", type: "number" },
-      { key: "unit", label: "Unit" },
-      { key: "reorder_level", label: "Reorder", type: "number" },
-      { key: "purchase_price", label: "Price", type: "currency" },
-      { key: "expiry_date", label: "Expiry", type: "date" },
+      { key: "unit", label: "Unit", hideOnMobile: true },
+      { key: "reorder_level", label: "Reorder", type: "number", hideOnMobile: true },
+      { key: "purchase_price", label: "Price", type: "currency", hideOnMobile: true },
+      { key: "expiry_date", label: "Expiry", type: "date", hideOnMobile: true },
     ],
     fields: [
       { name: "feed_name", label: "Feed Name", type: "text", required: true },
@@ -117,7 +118,7 @@ export const RESOURCES: Record<string, ResourceConfig> = {
     columns: [
       { key: "date", label: "Date", type: "date" },
       { key: "quantity_used", label: "Quantity Used", type: "number" },
-      { key: "notes", label: "Notes" },
+      { key: "notes", label: "Notes", hideOnMobile: true },
     ],
     fields: [
       { name: "date", label: "Date", type: "date", required: true },
@@ -174,8 +175,8 @@ export const RESOURCES: Record<string, ResourceConfig> = {
     columns: [
       { key: "vaccine_name", label: "Vaccine" },
       { key: "next_due_date", label: "Next Due", type: "date" },
-      { key: "administered_by", label: "By" },
-      { key: "notes", label: "Notes" },
+      { key: "administered_by", label: "By", hideOnMobile: true },
+      { key: "notes", label: "Notes", hideOnMobile: true },
     ],
     fields: [
       { name: "vaccine_name", label: "Vaccine Name", type: "text", required: true },
@@ -214,8 +215,8 @@ export const RESOURCES: Record<string, ResourceConfig> = {
     columns: [
       { key: "full_name", label: "Name" },
       { key: "phone", label: "Phone" },
-      { key: "email", label: "Email" },
-      { key: "address", label: "Address" },
+      { key: "email", label: "Email", hideOnMobile: true },
+      { key: "address", label: "Address", hideOnMobile: true },
     ],
     fields: [
       { name: "full_name", label: "Full Name", type: "text", required: true },
@@ -236,10 +237,10 @@ export const RESOURCES: Record<string, ResourceConfig> = {
       { key: "sale_date", label: "Date", type: "date" },
       { key: "product", label: "Product" },
       { key: "sale_type", label: "Type", type: "badge" },
-      { key: "quantity", label: "Qty", type: "number" },
-      { key: "price", label: "Unit Price", type: "currency" },
+      { key: "quantity", label: "Qty", type: "number", hideOnMobile: true },
+      { key: "price", label: "Unit Price", type: "currency", hideOnMobile: true },
       { key: "total", label: "Total", type: "currency" },
-      { key: "payment_method", label: "Payment", type: "badge" },
+      { key: "payment_method", label: "Payment", type: "badge", hideOnMobile: true },
     ],
     fields: [
       { name: "sale_date", label: "Sale Date", type: "date", required: true },
@@ -263,7 +264,7 @@ export const RESOURCES: Record<string, ResourceConfig> = {
     columns: [
       { key: "expense_date", label: "Date", type: "date" },
       { key: "category", label: "Category", type: "badge" },
-      { key: "description", label: "Description" },
+      { key: "description", label: "Description", hideOnMobile: true },
       { key: "amount", label: "Amount", type: "currency" },
     ],
     fields: [
@@ -283,8 +284,8 @@ export const RESOURCES: Record<string, ResourceConfig> = {
     columns: [
       { key: "full_name", label: "Name" },
       { key: "role", label: "Role" },
-      { key: "phone", label: "Phone" },
-      { key: "salary", label: "Salary", type: "currency" },
+      { key: "phone", label: "Phone", hideOnMobile: true },
+      { key: "salary", label: "Salary", type: "currency", hideOnMobile: true },
       { key: "status", label: "Status", type: "badge" },
     ],
     fields: [
