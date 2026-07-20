@@ -1,41 +1,19 @@
-"use client"
-
-import type React from "react"
-import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
+import { Egg } from "lucide-react"
+import { loginUser } from "@/app/actions/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Egg, Loader2 } from "lucide-react"
-import { toast } from "sonner"
 
-export default function LoginPage() {
-  const router = useRouter()
-  const [email, setEmail] = useState("admin@poultryfarm.com")
-  const [password, setPassword] = useState("Admin@1234")
-  const [loading, setLoading] = useState(false)
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) {
-      if (error.message.includes("confirmed")) {
-        toast.error("Please confirm your email before signing in.")
-      } else {
-        toast.error(error.message)
-      }
-      setLoading(false)
-      return
-    }
-    toast.success("Welcome back")
-    router.push("/dashboard")
-    router.refresh()
-  }
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string; message?: string }>
+}) {
+  const params = await searchParams
+  const error = params.error
+  const message = params.message
 
   return (
     <main className="flex min-h-screen">
@@ -53,16 +31,28 @@ export default function LoginPage() {
             Manage flocks, feed, production, and finance in one place.
           </p>
 
-          <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
+          {error && (
+            <div className="mt-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+              {error}
+            </div>
+          )}
+
+          {message && (
+            <div className="mt-4 rounded-lg border border-primary/50 bg-primary/10 p-3 text-sm text-primary">
+              {message}
+            </div>
+          )}
+
+          <form action={loginUser} className="mt-8 flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 autoComplete="email"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@poultryfarm.com"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -77,15 +67,14 @@ export default function LoginPage() {
               </div>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 autoComplete="current-password"
                 required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
               />
             </div>
-            <Button type="submit" disabled={loading} className="mt-2">
-              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+            <Button type="submit" className="mt-2">
               Sign In
             </Button>
           </form>

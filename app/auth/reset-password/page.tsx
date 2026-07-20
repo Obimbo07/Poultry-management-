@@ -1,38 +1,17 @@
-"use client"
-
-import type React from "react"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
+import Link from "next/link"
+import { Egg } from "lucide-react"
+import { resetPassword } from "@/app/actions/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Egg, Loader2 } from "lucide-react"
-import { toast } from "sonner"
 
-export default function ResetPasswordPage() {
-  const router = useRouter()
-  const [password, setPassword] = useState("")
-  const [confirm, setConfirm] = useState("")
-  const [loading, setLoading] = useState(false)
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (password !== confirm) {
-      toast.error("Passwords do not match")
-      return
-    }
-    setLoading(true)
-    const supabase = createClient()
-    const { error } = await supabase.auth.updateUser({ password })
-    setLoading(false)
-    if (error) {
-      toast.error(error.message)
-      return
-    }
-    toast.success("Password updated")
-    router.push("/dashboard")
-  }
+export default async function ResetPasswordPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>
+}) {
+  const params = await searchParams
+  const error = params.error
 
   return (
     <main className="flex min-h-screen items-center justify-center px-6 py-12">
@@ -47,34 +26,44 @@ export default function ResetPasswordPage() {
         <h1 className="text-2xl font-bold tracking-tight">Set a new password</h1>
         <p className="mt-2 text-sm text-muted-foreground">Choose a strong password for your account.</p>
 
-        <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
+        {error && (
+          <div className="mt-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+            {error}
+          </div>
+        )}
+
+        <form action={resetPassword} className="mt-8 flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <Label htmlFor="password">New Password</Label>
             <Input
               id="password"
+              name="password"
               type="password"
               required
-              minLength={6}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              minLength={8}
+              placeholder="Min 8 characters"
             />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="confirm">Confirm Password</Label>
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input
-              id="confirm"
+              id="confirmPassword"
+              name="confirmPassword"
               type="password"
               required
-              minLength={6}
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
+              minLength={8}
+              placeholder="Confirm your password"
             />
           </div>
-          <Button type="submit" disabled={loading}>
-            {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-            Update password
-          </Button>
+          <Button type="submit">Update password</Button>
         </form>
+
+        <Link
+          href="/auth/login"
+          className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+        >
+          Back to login
+        </Link>
       </div>
     </main>
   )

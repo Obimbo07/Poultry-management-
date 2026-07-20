@@ -1,36 +1,18 @@
-"use client"
-
-import type React from "react"
-import { useState } from "react"
 import Link from "next/link"
-import { createClient } from "@/lib/supabase/client"
+import { Egg, ArrowLeft } from "lucide-react"
+import { forgotPassword } from "@/app/actions/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Egg, Loader2, ArrowLeft } from "lucide-react"
-import { toast } from "sonner"
 
-export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [sent, setSent] = useState(false)
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    const supabase = createClient()
-    const redirectTo =
-      process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ??
-      `${window.location.origin}/auth/callback?next=/auth/reset-password`
-    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo })
-    setLoading(false)
-    if (error) {
-      toast.error(error.message)
-      return
-    }
-    setSent(true)
-    toast.success("Reset link sent")
-  }
+export default async function ForgotPasswordPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string; sent?: string }>
+}) {
+  const params = await searchParams
+  const error = params.error
+  const sent = params.sent === "true"
 
   return (
     <main className="flex min-h-screen items-center justify-center px-6 py-12">
@@ -49,22 +31,25 @@ export default function ForgotPasswordPage() {
             : "Enter your email and we'll send you a reset link."}
         </p>
 
+        {error && (
+          <div className="mt-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+            {error}
+          </div>
+        )}
+
         {!sent && (
-          <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
+          <form action={forgotPassword} className="mt-8 flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="john@poultryfarm.com"
               />
             </div>
-            <Button type="submit" disabled={loading}>
-              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              Send reset link
-            </Button>
+            <Button type="submit">Send reset link</Button>
           </form>
         )}
 

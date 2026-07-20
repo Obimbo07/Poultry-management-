@@ -1,76 +1,18 @@
-"use client"
-
-import type React from "react"
-import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { createClient } from "@/lib/supabase/client"
+import { Egg } from "lucide-react"
+import { registerUser } from "@/app/actions/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Egg, Loader2 } from "lucide-react"
-import { toast } from "sonner"
 
-export default function RegisterPage() {
-  const [fullName, setFullName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [loading, setLoading] = useState(false)
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match")
-      return
-    }
-
-    if (password.length < 8) {
-      toast.error("Password must be at least 8 characters")
-      return
-    }
-
-    setLoading(true)
-
-    try {
-      const supabase = createClient()
-
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-          },
-        },
-      })
-
-      if (error) {
-        toast.error(error.message)
-        setLoading(false)
-        return
-      }
-
-      if (data?.user?.identities?.length === 0) {
-        toast.error("This email is already registered")
-        setLoading(false)
-        return
-      }
-
-      if (data?.session) {
-        toast.success("Account created and signed in successfully!")
-        window.location.href = "/dashboard"
-      } else {
-        toast.success("Account created! Please check your email to verify, then sign in.")
-        window.location.href = "/auth/login"
-      }
-    } catch (err) {
-      console.error("Registration failed:", err)
-      toast.error("Registration failed. Please try again.")
-      setLoading(false)
-    }
-  }
+export default async function RegisterPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>
+}) {
+  const params = await searchParams
+  const error = params.error
 
   return (
     <main className="flex min-h-screen">
@@ -88,17 +30,22 @@ export default function RegisterPage() {
             Start managing your poultry farm efficiently today.
           </p>
 
-          <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
+          {error && (
+            <div className="mt-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+              {error}
+            </div>
+          )}
+
+          <form action={registerUser} className="mt-8 flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="fullName">Full Name</Label>
               <Input
                 id="fullName"
+                name="fullName"
                 type="text"
                 autoComplete="name"
                 required
                 placeholder="John Doe"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
               />
             </div>
 
@@ -106,12 +53,11 @@ export default function RegisterPage() {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 autoComplete="email"
                 required
                 placeholder="john@poultryfarm.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
@@ -119,12 +65,11 @@ export default function RegisterPage() {
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 autoComplete="new-password"
                 required
                 placeholder="Min 8 characters"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
@@ -132,17 +77,15 @@ export default function RegisterPage() {
               <Label htmlFor="confirmPassword">Confirm Password</Label>
               <Input
                 id="confirmPassword"
+                name="confirmPassword"
                 type="password"
                 autoComplete="new-password"
                 required
                 placeholder="Confirm your password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
 
-            <Button type="submit" disabled={loading} className="mt-2">
-              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+            <Button type="submit" className="mt-2">
               Create Account
             </Button>
           </form>
